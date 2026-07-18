@@ -1,0 +1,46 @@
+name: Publish Package to npmjs with Notification
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Publish to npm
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          if npm view "${PACKAGE_NAME}@${PACKAGE_VERSION}" version >/dev/null 2>&1; then
+            echo "Version ${PACKAGE_VERSION} of ${PACKAGE_NAME} is already published on npm. Skipping publish."
+          else
+            npm publish
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  notify-dependents:
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify express-fix-any-js
+        run: |
+          curl -i -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.REPO_DISPATCH_TOKEN }}" \
+            https://api.github.com/repos/keshavsoft/express-fix-any-js/dispatches \
+            -d '{"event_type":"dependency-updated"}'

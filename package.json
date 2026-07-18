@@ -1,21 +1,20 @@
 {
   "name": "pattern-collector",
-  "version": "1.2.2",
-  "description": "CLI to build for appjs, the endpoints",
+  "version": "1.2.3",
+  "description": "A high-performance pattern collector and ESM import statement analyzer.",
   "keywords": [
-    "cli",
-    "scaffold",
-    "templates",
-    "node",
-    "project-generator"
+    "pattern",
+    "regex",
+    "parser",
+    "import",
+    "analyzer",
+    "esm",
+    "extractor"
   ],
   "dependencies": {},
   "type": "module",
   "exports": {
     ".": "./index.js"
-  },
-  "bin": {
-    "express-check-any-for-import": "./bin/cli.js"
   },
   "files": [
     "bin/",
