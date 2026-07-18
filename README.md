@@ -5,6 +5,11 @@
 [![npm version](https://img.shields.io/npm/v/pattern-collector.svg?style=flat-square&color=38bdf8)](https://www.npmjs.com/package/pattern-collector)
 [![license](https://img.shields.io/npm/l/pattern-collector.svg?style=flat-square&color=34d399)](LICENSE)
 
+🔗 **Quick Links:**
+*   📦 **NPM Registry**: [npmjs.com/package/pattern-collector](https://www.npmjs.com/package/pattern-collector)
+*   💻 **GitHub Repo**: [github.com/keshavsoft/pattern-collector](https://github.com/keshavsoft/pattern-collector)
+*   📄 **Interactive Docs**: [docs/index.html](file:///d:/KeshavSoftRepos/2026-07-18/ks6/pattern-collector/docs/index.html)
+
 ---
 
 ## 📖 Overview

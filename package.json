@@ -1,6 +1,6 @@
 {
   "name": "pattern-collector",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "A high-performance pattern collector and ESM import statement analyzer.",
   "keywords": [
     "pattern",
@@ -22,7 +22,7 @@
     "README.md",
     "LICENSE"
   ],
-  "homepage": "https://cli.keshavsoft.com",
+  "homepage": "https://github.com/keshavsoft/pattern-collector#readme",
   "repository": {
     "type": "git",
     "url": "https://github.com/keshavsoft/pattern-collector"
