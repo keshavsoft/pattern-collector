@@ -13,7 +13,7 @@ try {
     console.log("=== getAllImports Test ===");
     console.log(defaultFunc({
         fileContent: fileContent,
-        searchString: `/import\s+[\s\S]*?\s+from\s+['"][^'"]+['"]|import\s+['"][^'"]+['"]/g`
+        searchString: /import\s+[\s\S]*?\s+from\s+['"][^'"]+['"]|import\s+['"][^'"]+['"]/g
     }));
 } catch (error) {
     console.error("Error running test:", error.message);
