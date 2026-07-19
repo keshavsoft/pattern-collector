@@ -82,3 +82,11 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.REPO_DISPATCH_TOKEN }}" \
             https://api.github.com/repos/keshavsoft/express-fix-any-js/dispatches \
             -d '{"event_type":"dependency-updated"}'
+
+      - name: Notify pattern-collector-appjs-use
+        run: |
+          curl -i -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.REPO_DISPATCH_TOKEN }}" \
+            https://api.github.com/repos/keshavsoft/pattern-collector-appjs-use/dispatches \
+            -d '{"event_type":"dependency-updated"}'
