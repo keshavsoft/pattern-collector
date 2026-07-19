@@ -1,0 +1,95 @@
+name: Publish Package to npmjs with Conditional Notification
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    outputs:
+      was_published: ${{ steps.publish-step.outputs.was_published }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Publish to npm
+        id: publish-step
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          
+          # Fetch latest version from NPM registry before publish
+          BEFORE_VERSION=$(npm view "$PACKAGE_NAME" version 2>/dev/null || echo "None")
+          
+          echo "### 🚀 NPM Publication Summary" >> $GITHUB_STEP_SUMMARY
+          echo "* **Package**: \`$PACKAGE_NAME\`" >> $GITHUB_STEP_SUMMARY
+          echo "* **Before Publish Version**: \`$BEFORE_VERSION\`" >> $GITHUB_STEP_SUMMARY
+          
+          if npm view "${PACKAGE_NAME}@${PACKAGE_VERSION}" version >/dev/null 2>&1; then
+            echo "Version ${PACKAGE_VERSION} of ${PACKAGE_NAME} is already published on npm. Skipping publish."
+            echo "* **After Publish Version**: \`$BEFORE_VERSION\`" >> $GITHUB_STEP_SUMMARY
+            echo "* **Status**: ⚠️ Skipped (Version $PACKAGE_VERSION is already published on NPM)" >> $GITHUB_STEP_SUMMARY
+            echo "was_published=false" >> $GITHUB_OUTPUT
+          else
+            npm publish
+            echo "* **After Publish Version**: \`$PACKAGE_VERSION\`" >> $GITHUB_STEP_SUMMARY
+            echo "* **Status**: ✅ Successfully Published to NPM" >> $GITHUB_STEP_SUMMARY
+            echo "was_published=true" >> $GITHUB_OUTPUT
+          fi
+          echo "* **Registry Link**: [https://www.npmjs.com/package/$PACKAGE_NAME](https://www.npmjs.com/package/$PACKAGE_NAME)" >> $GITHUB_STEP_SUMMARY
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  deploy-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  notify-dependents:
+    needs: publish
+    if: needs.publish.outputs.was_published == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify express-fix-any-js
+        run: |
+          curl -i -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.REPO_DISPATCH_TOKEN }}" \
+            https://api.github.com/repos/keshavsoft/express-fix-any-js/dispatches \
+            -d '{"event_type":"dependency-updated"}'
