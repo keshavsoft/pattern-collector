@@ -362,6 +362,7 @@
          <div class="nav-links">
             <a href="https://www.npmjs.com/package/pattern-collector" target="_blank">NPM Package</a>
             <a href="https://github.com/keshavsoft/pattern-collector" target="_blank">GitHub</a>
+            <a href="https://github.com/keshavsoft/pattern-collector/actions/workflows/npm-publish.yml" target="_blank">Publish Workflow</a>
          </div>
       </nav>
 
@@ -431,6 +432,113 @@ const matches = patternCollector({
          </div>
       </div>
 
+      <!-- Toggleable Code & Output Example -->
+      <div class="card" style="grid-column: 1 / -1; margin-top: -16px; margin-bottom: 40px;">
+         <h2>📋 Code & Output Example</h2>
+         <p>Click the button below to show a full static script execution example along with the console output results.</p>
+         
+         <button class="btn" id="toggle-example-btn" style="width: auto; padding: 10px 20px; margin-bottom: 15px;" onclick="toggleExampleContent()">Show Example Code & Output</button>
+         
+         <div id="example-content" style="display: none; border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 15px;">
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+               <button class="copy-btn" id="btn-v2-tab" onclick="switchExample('v2')" style="position: static; padding: 6px 14px; background: var(--bg-hover); border-color: var(--accent); color: var(--text-primary); font-size: 12px; border-radius: 6px;">V2 Test App (app.js)</button>
+               <button class="copy-btn" id="btn-v3-tab" onclick="switchExample('v3')" style="position: static; padding: 6px 14px; background: var(--bg-card); border-color: var(--border-color); color: var(--text-muted); font-size: 12px; border-radius: 6px;">V3 Test App (app.js)</button>
+            </div>
+
+            <!-- V2 Example Container -->
+            <div id="v2-example">
+               <div class="grid" style="margin-bottom: 0;">
+                  <div style="flex: 1;">
+                     <h3 style="font-size: 15px; margin-bottom: 8px; color: var(--accent);">JavaScript Execution Code</h3>
+                     <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>import patternCollector from 'pattern-collector';
+
+const code = `import { exec } from "child_process";
+import dotenv from 'dotenv'
+dotenv.config({ path: '.env' })
+
+import express from "express";
+
+import { router as routerFromapi }
+ from './api/routes.js';
+
+import setupRoutes from "./routes.js";
+import startServer from "./server.js";
+
+const app = express()
+
+app.use('/api', routerFromapi);
+
+setupRoutes(app);
+
+const { port } = startServer(app);
+
+if (process.env.OPEN_BROWSER === "true") {
+    exec(\`start http://localhost:\${port}/v26/quotations/index.html\`);
+};`;
+
+const matches = patternCollector({
+  fileContent: code,
+  searchString: /import\s+[\s\S]*?\s+from\s+['"][^'"]+['"]|import\s+['"][^'"]+['"]/g
+});
+
+console.log(matches);</code></pre>
+                  </div>
+                  
+                  <div style="flex: 1;">
+                     <h3 style="font-size: 15px; margin-bottom: 8px; color: var(--accent);">Console Output Results</h3>
+                     <pre><code>[
+  'import { exec } from "child_process"',
+  "import dotenv from 'dotenv'",
+  'import express from "express"',
+  "import { router as routerFromapi }\n from './api/routes.js'",
+  'import setupRoutes from "./routes.js"',
+  'import startServer from "./server.js"'
+]</code></pre>
+                  </div>
+               </div>
+            </div>
+
+            <!-- V3 Example Container -->
+            <div id="v3-example" style="display: none;">
+               <div class="grid" style="margin-bottom: 0;">
+                  <div style="flex: 1;">
+                     <h3 style="font-size: 15px; margin-bottom: 8px; color: var(--accent);">JavaScript Execution Code</h3>
+                     <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>import patternCollector from 'pattern-collector';
+
+const code = `import { exec } from "child_process";
+import express from "express";
+
+import startServer from "./server.js";
+
+const app = express();
+
+const { port } = startServer(app);
+
+if (process.env.OPEN_BROWSER === "true") {
+    exec(\`start http://localhost:\${port}/v26/quotations/index.html\`);
+};`;
+
+const matches = patternCollector({
+  fileContent: code,
+  searchString: /import\s+[\s\S]*?\s+from\s+['"][^'"]+['"]|import\s+['"][^'"]+['"]/g
+});
+
+console.log(matches);</code></pre>
+                  </div>
+                  
+                  <div style="flex: 1;">
+                     <h3 style="font-size: 15px; margin-bottom: 8px; color: var(--accent);">Console Output Results</h3>
+                     <pre><code>[
+  'import { exec } from "child_process"',
+  'import express from "express"',
+  'import startServer from "./server.js"'
+]</code></pre>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
       <!-- Playground section -->
       <div class="playground">
          <h2>🎮 Live Playground</h2>
@@ -452,13 +560,22 @@ console.log("App is running on port:", PORT);
             <div class="input-group">
                <label for="regex-input">Global Regular Expression</label>
                <input type="text" id="regex-input" value="import\s+[\s\S]*?\s+from\s+['&quot;][^'&quot;]+['&quot;]|import\s+['&quot;][^'&quot;]+['&quot;]">
-               <button class="btn" style="margin-top: 15px;" onclick="runCollector()">Collect Patterns</button>
+               <button class="btn" style="margin-top: 15px;" onclick="runCollector(true)">Collect Patterns</button>
             </div>
          </div>
 
          <div class="result-container">
-            <div class="result-label">Matches Result</div>
-            <div class="result-box" id="result-box">Click "Collect Patterns" to see results.</div>
+            <div class="result-label" style="margin-bottom: 10px;">Matches Result</div>
+            <div class="grid" style="margin-bottom: 0;">
+               <div>
+                  <div class="result-label">Indexed Matches</div>
+                  <div class="result-box" id="result-box">Click "Collect Patterns" to see results.</div>
+               </div>
+               <div id="raw-output-col" style="display: none;">
+                  <div class="result-label">Raw Output</div>
+                  <div class="result-box" id="raw-result-box">Click "Collect Patterns" to see results.</div>
+               </div>
+            </div>
          </div>
       </div>
 
@@ -468,6 +585,45 @@ console.log("App is running on port:", PORT);
    </div>
 
    <script>
+      function switchExample(version) {
+         const v2Div = document.getElementById('v2-example');
+         const v3Div = document.getElementById('v3-example');
+         const v2Btn = document.getElementById('btn-v2-tab');
+         const v3Btn = document.getElementById('btn-v3-tab');
+         
+         if (version === 'v2') {
+            v2Div.style.display = 'block';
+            v3Div.style.display = 'none';
+            v2Btn.style.background = 'var(--bg-hover)';
+            v2Btn.style.borderColor = 'var(--accent)';
+            v2Btn.style.color = 'var(--text-primary)';
+            v3Btn.style.background = 'var(--bg-card)';
+            v3Btn.style.borderColor = 'var(--border-color)';
+            v3Btn.style.color = 'var(--text-muted)';
+         } else {
+            v2Div.style.display = 'none';
+            v3Div.style.display = 'block';
+            v3Btn.style.background = 'var(--bg-hover)';
+            v3Btn.style.borderColor = 'var(--accent)';
+            v3Btn.style.color = 'var(--text-primary)';
+            v2Btn.style.background = 'var(--bg-card)';
+            v2Btn.style.borderColor = 'var(--border-color)';
+            v2Btn.style.color = 'var(--text-muted)';
+         }
+      }
+
+      function toggleExampleContent() {
+         const content = document.getElementById('example-content');
+         const btn = document.getElementById('toggle-example-btn');
+         if (content.style.display === 'none') {
+            content.style.display = 'block';
+            btn.innerText = 'Hide Example Code & Output';
+         } else {
+            content.style.display = 'none';
+            btn.innerText = 'Show Example Code & Output';
+         }
+      }
+
       function copyCode(btn) {
          const code = btn.nextElementSibling.innerText;
          navigator.clipboard.writeText(code).then(() => {
@@ -479,10 +635,12 @@ console.log("App is running on port:", PORT);
          });
       }
 
-      function runCollector() {
+      function runCollector(showRaw = false) {
          const codeText = document.getElementById('code-input').value;
          const regexText = document.getElementById('regex-input').value;
          const resultBox = document.getElementById('result-box');
+         const rawResultBox = document.getElementById('raw-result-box');
+         const col = document.getElementById('raw-output-col');
          
          try {
             // Reconstruct the RegExp with the global flag
@@ -500,6 +658,8 @@ console.log("App is running on port:", PORT);
             
             if (matches.length === 0) {
                resultBox.innerHTML = '<span class="no-match">No pattern matches found.</span>';
+               rawResultBox.innerHTML = '<span class="no-match">No pattern matches found.</span>';
+               col.style.display = 'none';
                return;
             }
             
@@ -510,13 +670,23 @@ console.log("App is running on port:", PORT);
                div.innerText = `[${index}] ${item}`;
                resultBox.appendChild(div);
             });
+
+            rawResultBox.innerText = matches.join('\n');
+            
+            if (showRaw) {
+               col.style.display = 'block';
+            } else {
+               col.style.display = 'none';
+            }
          } catch (error) {
             resultBox.innerHTML = `<span style="color: #ef4444;">RegExp Error: ${error.message}</span>`;
+            rawResultBox.innerHTML = `<span style="color: #ef4444;">RegExp Error: ${error.message}</span>`;
+            col.style.display = 'none';
          }
       }
       
       // Auto run playground on page load
-      window.onload = runCollector;
+      window.onload = () => runCollector(false);
    </script>
 </body>
 

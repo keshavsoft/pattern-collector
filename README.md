@@ -8,7 +8,8 @@
 🔗 **Quick Links:**
 *   📦 **NPM Registry**: [npmjs.com/package/pattern-collector](https://www.npmjs.com/package/pattern-collector)
 *   💻 **GitHub Repo**: [github.com/keshavsoft/pattern-collector](https://github.com/keshavsoft/pattern-collector)
-*   📄 **Interactive Docs**: [docs/index.html](file:///d:/KeshavSoftRepos/2026-07-18/ks6/pattern-collector/docs/index.html)
+*   📄 **Interactive Docs**: [keshavsoft.github.io/pattern-collector](https://keshavsoft.github.io/pattern-collector/)
+*   ⚙️ **Publish Workflow**: [.github/workflows/npm-publish.yml](file:///d:/KeshavSoftRepos/2026-07-18/ks6/pattern-collector/.github/workflows/npm-publish.yml)
 
 ---
 
