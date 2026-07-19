@@ -1,11 +1,6 @@
 name: Publish Package to npmjs with Notification
 
 on:
-  push:
-    branches:
-      - main
-  release:
-    types: [published]
   workflow_dispatch:
 
 permissions:
