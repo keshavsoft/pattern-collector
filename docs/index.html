@@ -443,10 +443,12 @@ const matches = patternCollector({
             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                <button class="copy-btn" id="btn-v2-tab" onclick="switchExample('v2')" style="position: static; padding: 6px 14px; background: var(--bg-hover); border-color: var(--accent); color: var(--text-primary); font-size: 12px; border-radius: 6px;">V2 Test App (app.js)</button>
                <button class="copy-btn" id="btn-v3-tab" onclick="switchExample('v3')" style="position: static; padding: 6px 14px; background: var(--bg-card); border-color: var(--border-color); color: var(--text-muted); font-size: 12px; border-radius: 6px;">V3 Test App (app.js)</button>
+               <button class="copy-btn" id="btn-v4-tab" onclick="switchExample('v4')" style="position: static; padding: 6px 14px; background: var(--bg-card); border-color: var(--border-color); color: var(--text-muted); font-size: 12px; border-radius: 6px;">V4 Test App (app.js)</button>
             </div>
 
             <!-- V2 Example Container -->
             <div id="v2-example">
+               <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 15px;"><strong>Regex Pattern (searchString):</strong> <code style="color: var(--accent); background: var(--bg-hover); padding: 2px 6px; border-radius: 4px;">/import\s+[\s\S]*?\s+from\s+['"][^'"]+['"]|import\s+['"][^'"]+['"]/g</code></p>
                <div class="grid" style="margin-bottom: 0;">
                   <div style="flex: 1;">
                      <h3 style="font-size: 15px; margin-bottom: 8px; color: var(--accent);">JavaScript Execution Code</h3>
@@ -500,6 +502,7 @@ console.log(matches);</code></pre>
 
             <!-- V3 Example Container -->
             <div id="v3-example" style="display: none;">
+               <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 15px;"><strong>Regex Pattern (searchString):</strong> <code style="color: var(--accent); background: var(--bg-hover); padding: 2px 6px; border-radius: 4px;">/import\s+[\s\S]*?\s+from\s+['"][^'"]+['"]|import\s+['"][^'"]+['"]/g</code></p>
                <div class="grid" style="margin-bottom: 0;">
                   <div style="flex: 1;">
                      <h3 style="font-size: 15px; margin-bottom: 8px; color: var(--accent);">JavaScript Execution Code</h3>
@@ -532,6 +535,54 @@ console.log(matches);</code></pre>
   'import { exec } from "child_process"',
   'import express from "express"',
   'import startServer from "./server.js"'
+]</code></pre>
+                  </div>
+               </div>
+            </div>
+
+            <!-- V4 Example Container -->
+            <div id="v4-example" style="display: none;">
+               <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 15px;"><strong>Regex Pattern (searchString):</strong> <code style="color: var(--accent); background: var(--bg-hover); padding: 2px 6px; border-radius: 4px;">/^[ \t]*app\.use\s*\(/gm</code></p>
+               <div class="grid" style="margin-bottom: 0;">
+                  <div style="flex: 1;">
+                     <h3 style="font-size: 15px; margin-bottom: 8px; color: var(--accent);">JavaScript Execution Code</h3>
+                     <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>import patternCollector from 'pattern-collector';
+
+const code = `import { exec } from "child_process";
+import dotenv from 'dotenv'
+dotenv.config({ path: '.env' })
+
+import express from "express";
+
+import { router as routerFromapi } from './api/routes.js';
+
+import setupRoutes from "./routes.js";
+import startServer from "./server.js";
+
+const app = express()
+
+app.use('/api', routerFromapi);
+
+setupRoutes(app);
+
+const { port } = startServer(app);
+
+if (process.env.OPEN_BROWSER === "true") {
+    exec(\`start http://localhost:\${port}/v28/quotations/index.html\`);
+};`;
+
+const matches = patternCollector({
+  fileContent: code,
+  searchString: /^[ \t]*app\.use\s*\(/gm
+});
+
+console.log(matches);</code></pre>
+                  </div>
+                  
+                  <div style="flex: 1;">
+                     <h3 style="font-size: 15px; margin-bottom: 8px; color: var(--accent);">Console Output Results</h3>
+                     <pre><code>[
+  'app.use('
 ]</code></pre>
                   </div>
                </div>
@@ -586,30 +637,22 @@ console.log("App is running on port:", PORT);
 
    <script>
       function switchExample(version) {
-         const v2Div = document.getElementById('v2-example');
-         const v3Div = document.getElementById('v3-example');
-         const v2Btn = document.getElementById('btn-v2-tab');
-         const v3Btn = document.getElementById('btn-v3-tab');
-         
-         if (version === 'v2') {
-            v2Div.style.display = 'block';
-            v3Div.style.display = 'none';
-            v2Btn.style.background = 'var(--bg-hover)';
-            v2Btn.style.borderColor = 'var(--accent)';
-            v2Btn.style.color = 'var(--text-primary)';
-            v3Btn.style.background = 'var(--bg-card)';
-            v3Btn.style.borderColor = 'var(--border-color)';
-            v3Btn.style.color = 'var(--text-muted)';
-         } else {
-            v2Div.style.display = 'none';
-            v3Div.style.display = 'block';
-            v3Btn.style.background = 'var(--bg-hover)';
-            v3Btn.style.borderColor = 'var(--accent)';
-            v3Btn.style.color = 'var(--text-primary)';
-            v2Btn.style.background = 'var(--bg-card)';
-            v2Btn.style.borderColor = 'var(--border-color)';
-            v2Btn.style.color = 'var(--text-muted)';
-         }
+         const versions = ['v2', 'v3', 'v4'];
+         versions.forEach(v => {
+            const div = document.getElementById(`${v}-example`);
+            const btn = document.getElementById(`btn-${v}-tab`);
+            if (v === version) {
+               div.style.display = 'block';
+               btn.style.background = 'var(--bg-hover)';
+               btn.style.borderColor = 'var(--accent)';
+               btn.style.color = 'var(--text-primary)';
+            } else {
+               div.style.display = 'none';
+               btn.style.background = 'var(--bg-card)';
+               btn.style.borderColor = 'var(--border-color)';
+               btn.style.color = 'var(--text-muted)';
+            }
+         });
       }
 
       function toggleExampleContent() {
