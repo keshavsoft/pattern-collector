@@ -25,11 +25,24 @@ jobs:
         run: |
           PACKAGE_NAME=$(node -p "require('./package.json').name")
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          
+          # Fetch latest version from NPM registry before publish
+          BEFORE_VERSION=$(npm view "$PACKAGE_NAME" version 2>/dev/null || echo "None")
+          
+          echo "### 🚀 NPM Publication Summary" >> $GITHUB_STEP_SUMMARY
+          echo "* **Package**: \`$PACKAGE_NAME\`" >> $GITHUB_STEP_SUMMARY
+          echo "* **Before Publish Version**: \`$BEFORE_VERSION\`" >> $GITHUB_STEP_SUMMARY
+          
           if npm view "${PACKAGE_NAME}@${PACKAGE_VERSION}" version >/dev/null 2>&1; then
             echo "Version ${PACKAGE_VERSION} of ${PACKAGE_NAME} is already published on npm. Skipping publish."
+            echo "* **After Publish Version**: \`$BEFORE_VERSION\`" >> $GITHUB_STEP_SUMMARY
+            echo "* **Status**: ⚠️ Skipped (Version $PACKAGE_VERSION is already published on NPM)" >> $GITHUB_STEP_SUMMARY
           else
             npm publish
+            echo "* **After Publish Version**: \`$PACKAGE_VERSION\`" >> $GITHUB_STEP_SUMMARY
+            echo "* **Status**: ✅ Successfully Published to NPM" >> $GITHUB_STEP_SUMMARY
           fi
+          echo "* **Registry Link**: [https://www.npmjs.com/package/$PACKAGE_NAME](https://www.npmjs.com/package/$PACKAGE_NAME)" >> $GITHUB_STEP_SUMMARY
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
