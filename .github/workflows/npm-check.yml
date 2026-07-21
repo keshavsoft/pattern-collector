@@ -1,0 +1,36 @@
+name: NPM Check Only with Summary
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check NPM Registry
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          NPM_VERSION=$(npm view "$PACKAGE_NAME" version 2>/dev/null || echo "Not Published")
+          
+          echo "### 🔍 NPM Package Status" >> $GITHUB_STEP_SUMMARY
+          echo "* **Package Name**: \`$PACKAGE_NAME\`" >> $GITHUB_STEP_SUMMARY
+          echo "* **Local Version**: \`$LOCAL_VERSION\`" >> $GITHUB_STEP_SUMMARY
+          echo "* **NPM Latest Version**: \`$NPM_VERSION\`" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "$LOCAL_VERSION" = "$NPM_VERSION" ]; then
+            echo "* **Status**: ✅ NPM version matches local version." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "* **Status**: ⚠️ NPM version ($NPM_VERSION) differs from local version ($LOCAL_VERSION)." >> $GITHUB_STEP_SUMMARY
+          fi
