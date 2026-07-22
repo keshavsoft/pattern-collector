@@ -1,6 +1,9 @@
 name: NPM Check, Publish and Notify
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:

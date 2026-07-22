@@ -1,6 +1,9 @@
 name: NPM Check Only with Summary
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
