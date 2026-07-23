@@ -26,6 +26,7 @@ jobs:
           
           echo "### 🔍 NPM Package Status" >> $GITHUB_STEP_SUMMARY
           echo "* **Package Name**: \`$PACKAGE_NAME\`" >> $GITHUB_STEP_SUMMARY
+          echo "* **NPM Link**: [https://www.npmjs.com/package/$PACKAGE_NAME](https://www.npmjs.com/package/$PACKAGE_NAME)" >> $GITHUB_STEP_SUMMARY
           echo "* **Local Version**: \`$LOCAL_VERSION\`" >> $GITHUB_STEP_SUMMARY
           echo "* **NPM Latest Version**: \`$NPM_VERSION\`" >> $GITHUB_STEP_SUMMARY
           
