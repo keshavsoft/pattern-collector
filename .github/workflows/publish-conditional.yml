@@ -81,3 +81,14 @@ jobs:
             echo "* **pattern-collector-routesjs-use**: ❌ Failed to dispatch (HTTP $RESPONSE2)" >> $GITHUB_STEP_SUMMARY
             cat resp2.json >> $GITHUB_STEP_SUMMARY
           fi
+          RESPONSE3=$(curl -s -w "%{http_code}" -o resp3.json -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.REPO_DISPATCH_TOKEN }}" \
+            https://api.github.com/repos/keshavsoft/pattern-collector-anyjs-matches/dispatches \
+            -d '{"event_type":"dependency-updated"}')
+          if [ "$RESPONSE3" = "204" ]; then
+            echo "* **pattern-collector-anyjs-matches**: ✅ Dispatched successfully (HTTP 204)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "* **pattern-collector-anyjs-matches**: ❌ Failed to dispatch (HTTP $RESPONSE3)" >> $GITHUB_STEP_SUMMARY
+            cat resp3.json >> $GITHUB_STEP_SUMMARY
+          fi
