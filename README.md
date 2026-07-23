@@ -9,7 +9,7 @@
 *   📦 **NPM Registry**: [npmjs.com/package/pattern-collector](https://www.npmjs.com/package/pattern-collector)
 *   💻 **GitHub Repo**: [github.com/keshavsoft/pattern-collector](https://github.com/keshavsoft/pattern-collector)
 *   📄 **Interactive Docs**: [keshavsoft.github.io/pattern-collector](https://keshavsoft.github.io/pattern-collector/)
-*   ⚙️ **Publish Workflow**: [.github/workflows/npm-publish.yml](file:///d:/KeshavSoftRepos/2026-07-18/ks6/pattern-collector/.github/workflows/npm-publish.yml)
+*   ⚙️ **Publish Workflow**: [.github/workflows/npm-publish.yml](file:///d:/KeshavSoftRepos/2026-07-23(1)/pattern-collector/.github/workflows/npm-publish.yml)
 
 ---
 
@@ -53,7 +53,10 @@ An options object containing:
 
 #### Returns
 
-*   `(string[])`: An array of matches found. If no matches are found, it returns an empty array.
+*   `Object[]`: An array of matches found. If no matches are found, it returns an empty array.
+    *   `match` `(string)`: The exact matched substring.
+    *   `line` `(string)`: The full line of code containing the match.
+    *   `lineNumber` `(number)`: The 1-indexed line number in the source file.
 
 ---
 
@@ -80,9 +83,21 @@ console.log(imports);
 /*
 Output:
 [
-  'import { exec } from "child_process"',
-  "import dotenv from 'dotenv'",
-  'import express from "express"'
+  {
+    match: 'import { exec } from "child_process"',
+    line: 'import { exec } from "child_process";',
+    lineNumber: 2
+  },
+  {
+    match: "import dotenv from 'dotenv'",
+    line: "import dotenv from 'dotenv';",
+    lineNumber: 3
+  },
+  {
+    match: 'import express from "express"',
+    line: 'import express from "express";',
+    lineNumber: 4
+  }
 ]
 */
 ```
