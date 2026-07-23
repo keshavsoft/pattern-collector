@@ -1,6 +1,6 @@
 {
   "name": "pattern-collector",
-  "version": "1.5.10",
+  "version": "1.5.11",
   "description": "A high-performance pattern collector and ESM import statement analyzer.",
   "keywords": [
     "pattern",
